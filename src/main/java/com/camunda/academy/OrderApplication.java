@@ -37,7 +37,7 @@ public class OrderApplication {
     private static final int NUM_INSTANCES = 1; // TOTAL NUMBER OF NEW PROCESS INSTANCES CREATED
 
     // Worker configuration
-    private static final int WORKER_TIMEOUT = 1; // Set the time for how long a job is exclusively assigned for this worker.
+   // private static final int WORKER_TIMEOUT = 1; // Set the time for how long a job is exclusively assigned for this worker.
         
     public static void main(String[] args) {
         loadProperties();
