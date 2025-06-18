@@ -3,7 +3,7 @@ package com.camunda.academy;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.time.Duration;
+//import java.time.Duration;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
