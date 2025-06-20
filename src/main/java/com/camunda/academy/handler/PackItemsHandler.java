@@ -2,6 +2,7 @@ package com.camunda.academy.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Map;
 
 import com.camunda.academy.services.TrackingOrderService;
 
@@ -17,11 +18,11 @@ public class PackItemsHandler implements JobHandler {
 
     @Override
     public void handle(JobClient client, ActivatedJob job) throws Exception {
-      
+
         final Map<String, Object> inputVariables = job.getVariablesAsMap();
         final String orderId = (String) inputVariables.get("orderId");
         logger.info("Order: {} Packing items", orderId);
-        final booelan itemsPacked = trackingOrderService.packItems(job);
+        final boolean itemsPacked = trackingOrderService.packItems(job);
 
         logger.info("Process Variables retrieved from the PackItemsHandler {}", inputVariables);
         inputVariables.put("itemsPacked", itemsPacked);
