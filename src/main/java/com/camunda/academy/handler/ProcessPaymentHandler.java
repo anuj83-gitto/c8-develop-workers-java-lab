@@ -17,10 +17,19 @@ public class ProcessPaymentHandler implements JobHandler {
 
     @Override
     public void handle(JobClient client, ActivatedJob job) throws Exception {
-        logger.info("Handling job: {} Processing payment", job.getKey());
-        trackingOrderService.processPayment(job);
-        logger.info("Handling job: {} Payment processed successfully", job.getKey());
+        final Map<String, Object> inputVariables = job.getVariablesAsMap();
+        final String orderId = (String) inputVariables.get("orderId");
+        logger.info("Order: {} Processing payment", orderId);
+        final String paymentConfirmation = trackingOrderService.processPayment(job);
+        logger.info("Order: {} Payment processed successfully with confirmation: {}", orderId, paymentConfirmation);
+        logger.info("Process variables retrieved from processPaymentsHandler: {}", inputVariables);
+        inputVariables.put("paymentConfirmation", paymentConfirmation);
+        logger.info("Order: {} Payment processed successfully", orderId);
+        client.newCompleteCommand(job.getKey())
+                .variables(inputVariables)
+                .send()
+                .join();
+        
 
-        client.newCompleteCommand(job.getKey()).send().join();
     }
 }

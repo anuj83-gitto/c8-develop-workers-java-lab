@@ -17,11 +17,16 @@ public class PackItemsHandler implements JobHandler {
 
     @Override
     public void handle(JobClient client, ActivatedJob job) throws Exception {
+      
+        final Map<String, Object> inputVariables = job.getVariablesAsMap();
+        final String orderId = (String) inputVariables.get("orderId");
+        logger.info("Order: {} Packing items", orderId);
+        final booelan itemsPacked = trackingOrderService.packItems(job);
 
-        logger.info("Handling job: {} Packing items", job.getKey());
-        trackingOrderService.packItems(job);
-        logger.info("Handling job: {} Items packed successfully", job.getKey());
+        logger.info("Process Variables retrieved from the PackItemsHandler {}", inputVariables);
+        inputVariables.put("itemsPacked", itemsPacked);
+        logger.info("Order: {} Items packed successfully", orderId);
 
-        client.newCompleteCommand(job.getKey()).send().join();
+        client.newCompleteCommand(job.getKey()).variables(inputVariables).send().join();
     }
 }
