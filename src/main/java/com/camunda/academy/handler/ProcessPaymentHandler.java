@@ -23,11 +23,11 @@ public class ProcessPaymentHandler implements JobHandler {
         logger.info("Order: {} Processing payment", orderId);
         final String paymentConfirmation = trackingOrderService.processPayment(job);
         logger.info("Order: {} Payment processed successfully with confirmation: {}", orderId, paymentConfirmation);
-        logger.info("Process variables retrieved from processPaymentsHandler: {}", inputVariables);
-        inputVariables.put("paymentConfirmation", paymentConfirmation);
+        
+      
         logger.info("Order: {} Payment processed successfully", orderId);
         client.newCompleteCommand(job.getKey())
-                .variables(inputVariables)
+                .variables(Map.of("paymentConfirmation", paymentConfirmation))
                 .send()
                 .join();
         

@@ -22,12 +22,10 @@ public class PackItemsHandler implements JobHandler {
         final Map<String, Object> inputVariables = job.getVariablesAsMap();
         final String orderId = (String) inputVariables.get("orderId");
         logger.info("Order: {} Packing items", orderId);
-        final boolean itemsPacked = trackingOrderService.packItems(job);
+        final boolean packedItems = trackingOrderService.packItems(job);
 
-        logger.info("Process Variables retrieved from the PackItemsHandler {}", inputVariables);
-        inputVariables.put("itemsPacked", itemsPacked);
         logger.info("Order: {} Items packed successfully", orderId);
 
-        client.newCompleteCommand(job.getKey()).variables(inputVariables).send().join();
+        client.newCompleteCommand(job.getKey()).variables(Map.of("packaged",packedItems)).send().join();
     }
 }
